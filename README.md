@@ -1,6 +1,6 @@
 # 🧠 LinguaAI — AI-Powered Multilingual Word Game
 
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete-green?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
@@ -131,40 +131,40 @@ Instead of a static word list, the AI generates **contextually appropriate words
 ## Implementation Roadmap
 
 ### Phase 1 — Core Game Logic
-- [ ] Word schema: { word, category, difficulty, language }
-- [ ] Seed static word bank (200 words × 6 categories) as fallback
-- [ ] Game state machine: in_progress | won | lost
-- [ ] Wrong guess counter, revealed letters array
-- [ ] Win/lose detection logic
+- [x] Word schema: { word, category, difficulty, language }
+- [x] Seed static word bank (200 words × 6 categories) as fallback
+- [x] Game state machine: in_progress | won | lost
+- [x] Wrong guess counter, revealed letters array
+- [x] Win/lose detection logic
 
 ### Phase 2 — SVG Hangman + UI
-- [ ] 8-step animated SVG component (Framer Motion path reveal)
-- [ ] Keyboard component (26 letter buttons, disabled after used)
-- [ ] Word display (blanks + revealed letters)
-- [ ] Category badge + difficulty indicator
-- [ ] Responsive layout (mobile keyboard remap)
+- [x] 8-step animated SVG component (Framer Motion path reveal)
+- [x] Keyboard component (26 letter buttons, disabled after used)
+- [x] Word display (blanks + revealed letters)
+- [x] Category badge + difficulty indicator
+- [x] Responsive layout (mobile keyboard remap)
 
 ### Phase 3 — Ollama AI Game Master
-- [ ] Ollama backend proxy (Express endpoint `/api/word`, `/api/hint`, `/api/explain`)
-- [ ] Word generation prompt (category + difficulty → word + metadata)
-- [ ] Progressive hint generation (3 hints, increasingly specific)
-- [ ] Post-game explanation (etymology + usage example in Turkish)
-- [ ] Difficulty adaptation: track win rate → adjust word complexity
+- [x] Ollama backend proxy (Express endpoint `/api/word`, `/api/hint`, `/api/explain`)
+- [x] Word generation prompt (category + difficulty → word + metadata)
+- [x] Progressive hint generation (3 hints, increasingly specific)
+- [x] Post-game explanation (etymology + usage example in Turkish)
+- [x] Difficulty adaptation: track win rate → adjust word complexity
 
 ### Phase 4 — Multiplayer (AI Duel + Friend Mode)
-- [ ] Socket.io rooms (create room → share link)
-- [ ] Friend mode: Player A types word → Player B guesses
-- [ ] AI Duel: AI guesses your word using letter frequency + Ollama reasoning
-- [ ] Live opponent state sync (which letters they guessed)
-- [ ] Room timer + rematch button
+- [x] Socket.io rooms (create room → share link)
+- [x] Friend mode: Player A types word → Player B guesses
+- [x] AI Duel: AI guesses your word using letter frequency + Ollama reasoning
+- [x] Live opponent state sync (which letters they guessed)
+- [x] Room timer + rematch button
 
 ### Phase 5 — Stats + Polish
-- [ ] Player stats dashboard (win rate, avg guesses, best category)
-- [ ] Global leaderboard (MongoDB, top 10 per category)
-- [ ] Sound effects (correct guess ding, wrong guess thud, win fanfare)
-- [ ] Dark/light theme
-- [ ] Turkish NLP mode: word + full Ottoman etymology chain
-- [ ] Deploy to Vercel (frontend) + Railway (backend)
+- [x] Player stats dashboard (win rate, avg guesses, best category)
+- [x] Global leaderboard (MongoDB, top 10 per category)
+- [x] Sound effects (correct guess ding, wrong guess thud, win fanfare)
+- [x] Dark/light theme
+- [x] Turkish NLP mode: word + full Ottoman etymology chain
+- [x] Deploy to Vercel (frontend) + Railway (backend)
 
 ---
 
