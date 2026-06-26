@@ -1,42 +1,116 @@
-# Hangman — Browser Word Guessing Game
+# 🧠 LinguaAI — AI-Powered Multilingual Word Game
 
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![CSS Animations](https://img.shields.io/badge/CSS%20Animations-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logoColor=white)
+![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)
 
-A classic hangman word guessing game with step-by-step animated SVG drawing, word categories, difficulty levels, and a local leaderboard.
-
----
-
-## Gameplay
-
-```
-  ┌────┐
-  │    │        Word: _ _ _ _ _ _ _ _
-  │    O        Category: Technology
-  │   /|\       Difficulty: Medium
-  │    |
-  │   / \       Wrong guesses: E, A, I
-  ─────────     Remaining: 3 lives
-```
-
-Guess letters one by one. Each wrong guess adds a body part to the gallows. Solve the word before the drawing is complete to win.
+> **"Kelime oyunu değil, dil öğretmeni."**
 
 ---
 
-## Planned Features
+## The Problem
 
-- **Animated SVG hangman** — step-by-step drawing as wrong guesses accumulate
-- **Word categories** — Technology, Nature, Sports, Movies, Countries, Science
-- **Difficulty levels:**
-  - Easy — short words (4–5 letters), hints available
-  - Medium — moderate words (6–8 letters), one hint
-  - Hard — long words (9+ letters), no hints
-- **Hint system** — reveal one random letter at the cost of a guess
-- **Score tracking** — win streak, total score stored in LocalStorage
-- **Multiplayer mode** — one player types a word, the other guesses it
-- **Word of the day** — a daily challenge word shared across all players
+Classic hangman is static and forgettable. The word list is fixed, hints don't teach you anything, and you either win or lose with no insight. You've guessed "PYTHON" but have no idea why it's in the "Technology" category or where the word came from.
+
+## The Solution
+
+**LinguaAI** is a hangman-style word game where a **local LLM is the game master**. It picks contextually interesting words, generates progressive hints that teach you something real, adapts difficulty to your performance, and explains every word after the game — like a language teacher, not a random word picker.
+
+---
+
+## Game Modes
+
+| Mode | Description |
+|------|-------------|
+| 🎮 **Classic** | Standard hangman — AI picks thematic words with smart hints |
+| 🤖 **AI Duel** | You guess AI's word, then AI tries to guess yours (AI uses letter frequency analysis) |
+| 🇹🇷 **Turkish NLP** | Turkish words only — AI teaches etymology, Ottoman roots, usage examples |
+| ⚡ **Speed Mode** | 30-second rounds, AI drops progressive hints to help you win fast |
+
+---
+
+## AI Hint System
+
+Unlike static hints, LinguaAI's hints teach:
+
+```
+Word: _ _ _ _ _ _ _ _ (8 letters)
+Category: Technology
+
+Hint 1: "Bu kelime İngilizce'de bir inşaat terimi olarak doğdu, 
+         sonra programlamaya geçti."
+
+Hint 2: "Bir şeyi tekrar tekrar yapmanın sistematik yolu."
+
+Hint 3: "Python'da 'for' döngüsü bununla başlar."
+
+Word revealed: ITERATION
+
+Post-game explanation:
+"'Iteration' Latince 'iterare' (tekrarlamak) kökünden gelir.
+ Programlamada bir döngünün her turu bir iteration'dır.
+ Agile metodolojide sprint döngüleri de iteration olarak adlandırılır."
+```
+
+---
+
+## Architecture
+
+```
+┌────────────────────────────────────────────────────┐
+│                 React Client                       │
+│   Game Board | Keyboard | Hint Panel | SVG Drawing │
+└──────────────────────┬─────────────────────────────┘
+                       │  REST + WebSocket
+┌──────────────────────▼─────────────────────────────┐
+│              Node.js Backend                       │
+│   Game session management | Score tracking          │
+└────────┬──────────────────────────┬────────────────┘
+         │                          │
+┌────────▼──────────┐    ┌──────────▼──────────────┐
+│  Ollama (local)   │    │     Socket.io            │
+│  qwen2.5:7b       │    │  Multiplayer rooms        │
+│  Word generation  │    │  AI Duel move sync        │
+│  Hint generation  │    │  Live opponent state      │
+│  Post-game explain│    └─────────────────────────┘
+└───────────────────┘
+```
+
+---
+
+## SVG Hangman Animation
+
+The gallows drawing is built from 8 animated SVG paths, each revealed on a wrong guess:
+
+```
+Step 0: Empty gallows frame
+Step 1: Head (circle)
+Step 2: Body (vertical line)
+Step 3: Left arm
+Step 4: Right arm
+Step 5: Left leg
+Step 6: Right leg
+Step 7: Face expression changes (😐 → 😨) via SVG path morphing
+Step 8: Game over — full figure with Framer Motion shake
+```
+
+---
+
+## Word Categories & AI Generation
+
+Instead of a static word list, the AI generates **contextually appropriate words** per category on-demand:
+
+| Category | AI Word Style |
+|----------|--------------|
+| Technology | Programming terms, CS concepts, tools |
+| Turkish Literature | Words from Nazım Hikmet, Orhan Pamuk era |
+| Science | Biology, physics, chemistry terms |
+| Geography | Cities, rivers, mountains — with location hints |
+| Pop Culture | Movie titles, game characters, tech brands |
+| Ottoman Roots | Words derived from Arabic/Persian via Ottoman Turkish |
 
 ---
 
@@ -44,37 +118,72 @@ Guess letters one by one. Each wrong guess adds a body part to the gallows. Solv
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | React 18 + TypeScript |
-| Build | Vite |
-| Styling | CSS Modules + keyframe animations |
-| Drawing | SVG (animated paths) |
-| Persistence | LocalStorage |
-| Deploy | GitHub Pages |
+| Frontend | React 18 + TypeScript + Vite |
+| Styling | Tailwind CSS |
+| Animation | Framer Motion (SVG morphing, transitions) |
+| AI Game Master | Ollama (qwen2.5:7b — local) |
+| Multiplayer | Socket.io |
+| Backend | Node.js + Express |
+| Persistence | LocalStorage (stats) + MongoDB (leaderboard) |
 
 ---
 
-## Roadmap
+## Implementation Roadmap
 
-| Phase | Task | Status |
-|-------|------|--------|
-| Phase 1 | Word bank (200+ words per category) and game logic | [ ] |
-| Phase 2 | SVG hangman — incremental animated drawing | [ ] |
-| Phase 3 | Letter keyboard component + win/lose detection | [ ] |
-| Phase 4 | Category selection and difficulty system | [ ] |
-| Phase 5 | Hint system | [ ] |
-| Phase 6 | Score tracking and leaderboard (LocalStorage) | [ ] |
-| Phase 7 | Multiplayer mode (custom word input) | [ ] |
-| Phase 8 | Word of the day | [ ] |
-| Phase 9 | Sound effects + responsive design | [ ] |
-| Phase 10 | Deploy to GitHub Pages | [ ] |
+### Phase 1 — Core Game Logic
+- [ ] Word schema: { word, category, difficulty, language }
+- [ ] Seed static word bank (200 words × 6 categories) as fallback
+- [ ] Game state machine: in_progress | won | lost
+- [ ] Wrong guess counter, revealed letters array
+- [ ] Win/lose detection logic
+
+### Phase 2 — SVG Hangman + UI
+- [ ] 8-step animated SVG component (Framer Motion path reveal)
+- [ ] Keyboard component (26 letter buttons, disabled after used)
+- [ ] Word display (blanks + revealed letters)
+- [ ] Category badge + difficulty indicator
+- [ ] Responsive layout (mobile keyboard remap)
+
+### Phase 3 — Ollama AI Game Master
+- [ ] Ollama backend proxy (Express endpoint `/api/word`, `/api/hint`, `/api/explain`)
+- [ ] Word generation prompt (category + difficulty → word + metadata)
+- [ ] Progressive hint generation (3 hints, increasingly specific)
+- [ ] Post-game explanation (etymology + usage example in Turkish)
+- [ ] Difficulty adaptation: track win rate → adjust word complexity
+
+### Phase 4 — Multiplayer (AI Duel + Friend Mode)
+- [ ] Socket.io rooms (create room → share link)
+- [ ] Friend mode: Player A types word → Player B guesses
+- [ ] AI Duel: AI guesses your word using letter frequency + Ollama reasoning
+- [ ] Live opponent state sync (which letters they guessed)
+- [ ] Room timer + rematch button
+
+### Phase 5 — Stats + Polish
+- [ ] Player stats dashboard (win rate, avg guesses, best category)
+- [ ] Global leaderboard (MongoDB, top 10 per category)
+- [ ] Sound effects (correct guess ding, wrong guess thud, win fanfare)
+- [ ] Dark/light theme
+- [ ] Turkish NLP mode: word + full Ottoman etymology chain
+- [ ] Deploy to Vercel (frontend) + Railway (backend)
 
 ---
 
-## Getting Started (planned)
+## Getting Started (once Phase 1 is complete)
 
 ```bash
+# Prerequisites: Node.js 18+, Ollama
+ollama pull qwen2.5:7b
+
 git clone https://github.com/tursuntalha/hanging-man.git
 cd hanging-man
-npm install
-npm run dev
+
+# Backend
+cd server && npm install && npm start
+
+# Frontend
+cd ../client && npm install && npm run dev
 ```
+
+---
+
+> LinguaAI turns "I guessed the wrong letter" into "I just learned what iteration means in Ottoman-influenced Turkish computing terminology."
